@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-        mApi = createGithubApi();
+
         mUserAdapter = new UserAdapter(this, new ArrayList<User>());
         mListView.setAdapter(mUserAdapter);
         mAccountEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mApi = createGithubApi();
     }
 
     @OnClick(R.id.start_search_bt)
