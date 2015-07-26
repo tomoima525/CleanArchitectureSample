@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">simpleArchitecture</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="app_name">Android Clean Architecture</string>
+    <string name="title_activity_main">Android Clean Architecture</string>
     <string name="input_name">Input account id</string>
     <string name="search_button">Search</string>
     <string name="no_result">No result </string>

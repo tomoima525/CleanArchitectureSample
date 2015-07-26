@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CleanArchitectureSample</string>
+    <string name="app_name">Original Architecture</string>
     <string name="input_name">Input account id</string>
     <string name="search_button">Search</string>
     <string name="no_result">No result </string>
