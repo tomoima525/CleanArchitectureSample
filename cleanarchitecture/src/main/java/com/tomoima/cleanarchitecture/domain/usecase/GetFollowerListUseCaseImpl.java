@@ -1,10 +1,9 @@
 package com.tomoima.cleanarchitecture.domain.usecase;
 
-import android.util.Log;
-
 import com.tomoima.cleanarchitecture.domain.executor.PostExecutionThread;
 import com.tomoima.cleanarchitecture.domain.model.User;
 import com.tomoima.cleanarchitecture.domain.repository.UserRepository;
+import com.tomoima.cleanarchitecture.utils.StringUtil;
 
 import java.util.Collection;
 
@@ -29,7 +28,15 @@ public class GetFollowerListUseCaseImpl extends UseCase<String> implements GetFo
 
     @Override
     protected void call(String user) {
-        mUserRepository.getFollowers(user, this);
+        //validation
+        if(validate(user)) {
+            //access repository
+            mUserRepository.getFollowers(user, this);
+        }
+    }
+
+    private boolean validate(String user) {
+        return !StringUtil.isNullOrEmpty(user);
     }
 
     @Override
@@ -49,7 +56,6 @@ public class GetFollowerListUseCaseImpl extends UseCase<String> implements GetFo
         mPostExecutionThread.post(new Runnable() {
             @Override
             public void run() {
-                Log.d("GetFollowerListUseCase", "onError!!!");
                 mCallback.onError();
             }
         });

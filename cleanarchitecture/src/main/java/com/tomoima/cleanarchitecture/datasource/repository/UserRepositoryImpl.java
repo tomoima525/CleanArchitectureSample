@@ -1,7 +1,5 @@
 package com.tomoima.cleanarchitecture.datasource.repository;
 
-import android.util.Log;
-
 import com.tomoima.cleanarchitecture.datasource.api.GithubApi;
 import com.tomoima.cleanarchitecture.domain.model.User;
 import com.tomoima.cleanarchitecture.domain.repository.UserRepository;
@@ -51,7 +49,6 @@ public class UserRepositoryImpl implements UserRepository {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d("UserRepositoryIml", "onError!!!");
                 userListCallback.onError();
             }
         });

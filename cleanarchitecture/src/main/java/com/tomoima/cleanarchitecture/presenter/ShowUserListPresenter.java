@@ -1,7 +1,5 @@
 package com.tomoima.cleanarchitecture.presenter;
 
-import android.util.Log;
-
 import com.tomoima.cleanarchitecture.domain.model.User;
 import com.tomoima.cleanarchitecture.domain.usecase.GetFollowerListUseCase;
 
@@ -58,7 +56,6 @@ public class ShowUserListPresenter extends Presenter implements GetFollowerListU
 
     @Override
     public void onError() {
-        Log.d("ShowUserList", "onError!!!");
         mShowUserListView.hideLoading();
         mShowUserListView.showNoResultCase();
     }
