@@ -11,10 +11,17 @@ import java.util.Collection;
  * Created by tomoaki on 7/26/15.
  */
 public class GetFollowerListUseCaseImpl extends UseCase<String> implements GetFollowerListUseCase, UserRepository.UserListCallback {
+    private static GetFollowerListUseCaseImpl sUseCase;
     private final UserRepository mUserRepository;
     private PostExecutionThread mPostExecutionThread;
     private Callback mCallback;
 
+    public static GetFollowerListUseCaseImpl getUseCase(UserRepository userRepository, PostExecutionThread postExecutionThread){
+        if(sUseCase == null){
+            sUseCase = new GetFollowerListUseCaseImpl(userRepository, postExecutionThread);
+        }
+        return sUseCase;
+    }
     public GetFollowerListUseCaseImpl(UserRepository userRepository, PostExecutionThread postExecutionThread){
         mUserRepository = userRepository;
         mPostExecutionThread = postExecutionThread;

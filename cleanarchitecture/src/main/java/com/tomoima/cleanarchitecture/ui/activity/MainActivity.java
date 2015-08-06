@@ -71,10 +71,10 @@ public class MainActivity extends AppCompatActivity implements ShowUserListPrese
     private void initialize(){
 
         //DataSource Layer: RepositoryImpl
-        UserRepository userRepositoryImpl = new UserRepositoryImpl();
+        UserRepository userRepositoryImpl = UserRepositoryImpl.getRepository();
 
         //Domain Layer: UseCase
-        GetFollowerListUseCase getFollowerListUserCaseImpl = new GetFollowerListUseCaseImpl(userRepositoryImpl, UIThread.getInstance());
+        GetFollowerListUseCase getFollowerListUserCaseImpl = GetFollowerListUseCaseImpl.getUseCase(userRepositoryImpl, UIThread.getInstance());
 
         mShowUserListPresenter = new ShowUserListPresenter(getFollowerListUserCaseImpl);
         mShowUserListPresenter.setShowUserListView(this);

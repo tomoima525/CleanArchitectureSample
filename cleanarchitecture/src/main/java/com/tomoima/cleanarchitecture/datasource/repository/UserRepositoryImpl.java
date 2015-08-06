@@ -15,12 +15,18 @@ import retrofit.client.Response;
  * Created by tomoaki on 7/26/15.
  */
 public class UserRepositoryImpl implements UserRepository {
+    private static UserRepositoryImpl sUserRepository;
     private GithubApi mApi;
 
     public UserRepositoryImpl(){
         mApi = createGithubApi();
     }
-
+    public static UserRepositoryImpl getRepository(){
+        if(sUserRepository == null) {
+            sUserRepository = new UserRepositoryImpl();
+        }
+        return sUserRepository;
+    }
     private GithubApi createGithubApi() {
 
         RestAdapter.Builder builder = new RestAdapter.Builder().setEndpoint(
