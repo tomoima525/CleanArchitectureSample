@@ -7,39 +7,30 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.makeramen.roundedimageview.RoundedImageView;
 import com.tomoima.cleanarchitecture.R;
-import com.tomoima.cleanarchitecture.domain.model.User;
+import com.tomoima.cleanarchitecture.domain.model.Repos;
 
-import java.util.Collection;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * Created by tomoaki on 7/26/15.
+ * Created by tomoaki on 7/25/15.
  */
-public class UserAdapter extends ArrayAdapter<User> {
+public class RepoAdapter extends ArrayAdapter<Repos> {
     LayoutInflater mInflater;
     Context mContext;
-    public UserAdapter (Context context, List<User> dataList) {
+    public RepoAdapter(Context context, List<Repos> dataList) {
         super(context, -1, dataList);
         mInflater = LayoutInflater.from(context);
         mContext = context;
     }
 
-    public void refresh(Collection<User> dataList){
-        this.clear();
-        this.addAll(dataList);
-    }
-
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null) {
-            convertView = mInflater.inflate(R.layout.row_user, null);
+            convertView = mInflater.inflate(R.layout.row_repos, null);
         }
         ViewHolder viewHolder = new ViewHolder(convertView);
         convertView.setTag(viewHolder);
@@ -47,21 +38,23 @@ public class UserAdapter extends ArrayAdapter<User> {
         return convertView;
     }
 
-    public void bindView(View view, int position, User data){
+    public void bindView(View view, int position, Repos data){
         ViewHolder viewHolder = (ViewHolder) view.getTag();
-        Glide.with(mContext).load(data.avatar_url).into(viewHolder.mPhoto);
-        viewHolder.nameTv.setText(data.login);
-        view.setTag(R.id.list_item, data);
+        viewHolder.nameTv.setText(data.name);
+        viewHolder.descTv.setText(data.description);
+        viewHolder.urlTv.setText(data.html_url);
     }
 
     public static class ViewHolder{
-        @InjectView(R.id.photo_riv)
-        RoundedImageView mPhoto;
-        @InjectView(R.id.name_tv)
+        @InjectView(R.id.repos_description_tv)
+        TextView descTv;
+        @InjectView(R.id.repos_name_tv)
         TextView nameTv;
+        @InjectView(R.id.repos_url)
+        TextView urlTv;
 
         ViewHolder(View v){
-            ButterKnife.inject(this, v);
+            ButterKnife.inject(this,v);
         }
     }
 }

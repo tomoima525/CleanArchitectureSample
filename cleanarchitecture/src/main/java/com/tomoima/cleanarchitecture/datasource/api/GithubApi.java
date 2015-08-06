@@ -1,5 +1,6 @@
 package com.tomoima.cleanarchitecture.datasource.api;
 
+import com.tomoima.cleanarchitecture.domain.model.Repos;
 import com.tomoima.cleanarchitecture.domain.model.User;
 
 import java.util.List;
@@ -17,4 +18,7 @@ public interface GithubApi {
 
     @GET("/users/{user}/followers")
     void listFollowersAsync(@Path("user") String user, Callback<List<User>> cb);
+
+    @GET("/users/{user}/repos")
+    void listReposAsync(@Path("user") String user, Callback<List<Repos>> cb);
 }

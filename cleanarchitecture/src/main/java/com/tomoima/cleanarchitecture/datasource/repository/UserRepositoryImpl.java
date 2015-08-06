@@ -32,17 +32,6 @@ public class UserRepositoryImpl implements UserRepository {
         RestAdapter.Builder builder = new RestAdapter.Builder().setEndpoint(
                 "https://api.github.com/")
                 .setLogLevel(RestAdapter.LogLevel.FULL);
-
-//        final String githubToken = getResources().getString(R.string.github_oauth_token);
-//        if (!StringUtil.isNullOrEmpty(githubToken)) {
-//            builder.setRequestInterceptor(new RequestInterceptor() {
-//                @Override
-//                public void intercept(RequestFacade request) {
-//                    request.addHeader("Authorization", format("token %s", githubToken));
-//                }
-//            });
-//        }
-
         return builder.build().create(GithubApi.class);
     }
     @Override
