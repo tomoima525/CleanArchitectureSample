@@ -1,10 +1,12 @@
 package com.tomoima.cleanarchitecture.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -27,6 +29,7 @@ import java.util.Collection;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 
 public class MainActivity extends AppCompatActivity implements ShowUserListPresenter.ShowUserListView{
 
@@ -89,6 +92,13 @@ public class MainActivity extends AppCompatActivity implements ShowUserListPrese
         if(!StringUtil.isNullOrEmpty(text)) {
             mShowUserListPresenter.getFollowerList(text);
         }
+    }
+
+    @OnItemClick(R.id.search_result_view)
+    public void onListItemClick(AdapterView<?> adapter, View view, int pos, long id) {
+        User user = (User) view.getTag(R.id.list_item);
+        Intent intent = UserDetailActivity.createIntent(this, user);
+        startActivity(intent);
     }
 
     @Override
