@@ -1,11 +1,13 @@
 package com.tomoima.cleanarchitecturesample.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -23,6 +25,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -57,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
         mAccountEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (!hasFocus) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             }
@@ -84,22 +87,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @OnItemClick(R.id.search_result_view)
+    public void onListItemClick(AdapterView<?> adapter, View view, int pos, long id) {
+        User user = (User) view.getTag(R.id.list_item);
+        Intent intent = UserDetailActivity.createIntent(this, user);
+        startActivity(intent);
+    }
+
     private GithubApi createGithubApi() {
 
         RestAdapter.Builder builder = new RestAdapter.Builder().setEndpoint(
                 "https://api.github.com/")
                 .setLogLevel(RestAdapter.LogLevel.FULL);
-
-//        final String githubToken = getResources().getString(R.string.github_oauth_token);
-//        if (!StringUtil.isNullOrEmpty(githubToken)) {
-//            builder.setRequestInterceptor(new RequestInterceptor() {
-//                @Override
-//                public void intercept(RequestFacade request) {
-//                    request.addHeader("Authorization", format("token %s", githubToken));
-//                }
-//            });
-//        }
-
         return builder.build().create(GithubApi.class);
     }
 
