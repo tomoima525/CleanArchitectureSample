@@ -1,7 +1,5 @@
 package com.tomoima.cleanarchitecturesample.activity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -41,12 +39,6 @@ public class UserDetailActivity extends AppCompatActivity {
 
     private RepoAdapter mRepoAdapter;
     private GithubApi mApi;
-
-    public static Intent createIntent(Context context, User user){
-        Intent intent = new Intent(context, UserDetailActivity.class);
-        intent.putExtra(S.user, user);
-        return intent;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

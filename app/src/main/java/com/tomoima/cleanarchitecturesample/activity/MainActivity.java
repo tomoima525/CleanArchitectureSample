@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tomoima.cleanarchitecturesample.R;
+import com.tomoima.cleanarchitecturesample.consts.S;
 import com.tomoima.cleanarchitecturesample.models.User;
 import com.tomoima.cleanarchitecturesample.models.apis.GithubApi;
 import com.tomoima.cleanarchitecturesample.utils.StringUtil;
@@ -90,7 +91,12 @@ public class MainActivity extends AppCompatActivity {
     @OnItemClick(R.id.search_result_view)
     public void onListItemClick(AdapterView<?> adapter, View view, int pos, long id) {
         User user = (User) view.getTag(R.id.list_item);
-        Intent intent = UserDetailActivity.createIntent(this, user);
+        gotoUserDetailActivity(user);
+    }
+
+    private void gotoUserDetailActivity(User user){
+        Intent intent = new Intent(this, UserDetailActivity.class);
+        intent.putExtra(S.user, user);
         startActivity(intent);
     }
 
