@@ -12,9 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tomoima.cleanarchitecturesample.R;
 import com.tomoima.cleanarchitecturesample.consts.S;
+import com.tomoima.cleanarchitecturesample.models.SearchMemoryCache;
 import com.tomoima.cleanarchitecturesample.models.User;
 import com.tomoima.cleanarchitecturesample.models.apis.GithubApi;
 import com.tomoima.cleanarchitecturesample.utils.StringUtil;
@@ -92,6 +94,15 @@ public class MainActivity extends AppCompatActivity {
     public void onListItemClick(AdapterView<?> adapter, View view, int pos, long id) {
         User user = (User) view.getTag(R.id.list_item);
         gotoUserDetailActivity(user);
+
+        //Check if this user is clicked before
+        User checkUser = SearchMemoryCache.getInstance().getUser(user.login);
+        if(checkUser != null){
+            Toast toast = Toast.makeText(getApplicationContext(), checkUser.login + " is clicked before!", Toast.LENGTH_LONG);
+            toast.show();
+        } else {
+            SearchMemoryCache.getInstance().put(user.login,user);
+        }
     }
 
     private void gotoUserDetailActivity(User user){

@@ -10,25 +10,25 @@ import java.util.Collection;
 /**
  * Created by tomoaki on 7/26/15.
  */
-public class GetFollowerListUseCaseImpl extends UseCase<String> implements GetFollowerListUseCase, UserRepository.UserListCallback {
-    private static GetFollowerListUseCaseImpl sUseCase;
+public class FollowerListUseCaseImpl extends UseCase<String> implements FollowerListUseCase, UserRepository.UserRepositoryCallback {
+    private static FollowerListUseCaseImpl sUseCase;
     private final UserRepository mUserRepository;
     private PostExecutionThread mPostExecutionThread;
-    private Callback mCallback;
+    private FollowerListUseCaseCallback mCallback;
 
-    public static GetFollowerListUseCaseImpl getUseCase(UserRepository userRepository, PostExecutionThread postExecutionThread){
+    public static FollowerListUseCaseImpl getUseCase(UserRepository userRepository, PostExecutionThread postExecutionThread){
         if(sUseCase == null){
-            sUseCase = new GetFollowerListUseCaseImpl(userRepository, postExecutionThread);
+            sUseCase = new FollowerListUseCaseImpl(userRepository, postExecutionThread);
         }
         return sUseCase;
     }
-    public GetFollowerListUseCaseImpl(UserRepository userRepository, PostExecutionThread postExecutionThread){
+    public FollowerListUseCaseImpl(UserRepository userRepository, PostExecutionThread postExecutionThread){
         mUserRepository = userRepository;
         mPostExecutionThread = postExecutionThread;
     }
 
     @Override
-    public void execute(String user, Callback callback) {
+    public void execute(String user, FollowerListUseCaseCallback callback) {
         mCallback = callback;
         this.start(user);
     }
@@ -42,6 +42,14 @@ public class GetFollowerListUseCaseImpl extends UseCase<String> implements GetFo
         }
     }
 
+    public void setCallback(FollowerListUseCaseCallback callback) {
+        mCallback = callback;
+    }
+
+    public void removeCallback(){
+        mCallback = null;
+    }
+
     private boolean validate(String user) {
         return !StringUtil.isNullOrEmpty(user);
     }
@@ -52,9 +60,16 @@ public class GetFollowerListUseCaseImpl extends UseCase<String> implements GetFo
         mPostExecutionThread.post(new Runnable() {
             @Override
             public void run() {
-                mCallback.onFollowerListLoaded(usersCollection);
+                if(mCallback != null) {
+                    mCallback.onFollowerListLoaded(usersCollection);
+                }
             }
         });
+    }
+
+    @Override
+    public void onUserLoaded(User user) {
+
     }
 
     @Override
@@ -63,7 +78,9 @@ public class GetFollowerListUseCaseImpl extends UseCase<String> implements GetFo
         mPostExecutionThread.post(new Runnable() {
             @Override
             public void run() {
-                mCallback.onError();
+                if(mCallback != null) {
+                    mCallback.onError();
+                }
             }
         });
     }

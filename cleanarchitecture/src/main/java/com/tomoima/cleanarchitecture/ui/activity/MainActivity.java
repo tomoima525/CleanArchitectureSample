@@ -11,14 +11,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tomoima.cleanarchitecture.R;
 import com.tomoima.cleanarchitecture.datasource.repository.UserRepositoryImpl;
 import com.tomoima.cleanarchitecture.domain.executor.UIThread;
 import com.tomoima.cleanarchitecture.domain.model.User;
 import com.tomoima.cleanarchitecture.domain.repository.UserRepository;
-import com.tomoima.cleanarchitecture.domain.usecase.GetFollowerListUseCase;
-import com.tomoima.cleanarchitecture.domain.usecase.GetFollowerListUseCaseImpl;
+import com.tomoima.cleanarchitecture.domain.usecase.CheckUserUseCase;
+import com.tomoima.cleanarchitecture.domain.usecase.CheckUserUseCaseImpl;
+import com.tomoima.cleanarchitecture.domain.usecase.FollowerListUseCase;
+import com.tomoima.cleanarchitecture.domain.usecase.FollowerListUseCaseImpl;
 import com.tomoima.cleanarchitecture.presenter.ShowUserListPresenter;
 import com.tomoima.cleanarchitecture.ui.adapter.UserAdapter;
 import com.tomoima.cleanarchitecture.utils.StringUtil;
@@ -77,9 +80,11 @@ public class MainActivity extends AppCompatActivity implements ShowUserListPrese
         UserRepository userRepositoryImpl = UserRepositoryImpl.getRepository();
 
         //Domain Layer: UseCase
-        GetFollowerListUseCase getFollowerListUserCaseImpl = GetFollowerListUseCaseImpl.getUseCase(userRepositoryImpl, UIThread.getInstance());
+        FollowerListUseCase followerListUserCaseImpl = FollowerListUseCaseImpl.getUseCase(userRepositoryImpl, UIThread.getInstance());
+        CheckUserUseCase checkUserUseCaseImpl = CheckUserUseCaseImpl.getUseCase(userRepositoryImpl, UIThread.getInstance());
 
-        mShowUserListPresenter = new ShowUserListPresenter(getFollowerListUserCaseImpl);
+        //Initialize Presenter
+        mShowUserListPresenter = new ShowUserListPresenter(followerListUserCaseImpl, checkUserUseCaseImpl);
         mShowUserListPresenter.setShowUserListView(this);
     }
 
@@ -97,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements ShowUserListPrese
     @OnItemClick(R.id.search_result_view)
     public void onListItemClick(AdapterView<?> adapter, View view, int pos, long id) {
         User user = (User) view.getTag(R.id.list_item);
+        mShowUserListPresenter.checkUser(user);
         Intent intent = UserDetailActivity.createIntent(this, user);
         startActivity(intent);
     }
@@ -127,5 +133,11 @@ public class MainActivity extends AppCompatActivity implements ShowUserListPrese
     public void showResult(Collection<User> usersCollection) {
         mListView.setVisibility(View.VISIBLE);
         mUserAdapter.refresh(usersCollection);
+    }
+
+    @Override
+    public void showToast(String UserId) {
+        Toast toast = Toast.makeText(getApplicationContext(), UserId + " is clicked before!", Toast.LENGTH_LONG);
+        toast.show();
     }
 }

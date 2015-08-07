@@ -17,8 +17,8 @@ import com.tomoima.cleanarchitecture.domain.executor.UIThread;
 import com.tomoima.cleanarchitecture.domain.model.Repos;
 import com.tomoima.cleanarchitecture.domain.model.User;
 import com.tomoima.cleanarchitecture.domain.repository.ReposRepository;
-import com.tomoima.cleanarchitecture.domain.usecase.GetReposUseCase;
-import com.tomoima.cleanarchitecture.domain.usecase.GetReposUseCaseImpl;
+import com.tomoima.cleanarchitecture.domain.usecase.ReposUseCase;
+import com.tomoima.cleanarchitecture.domain.usecase.ReposUseCaseImpl;
 import com.tomoima.cleanarchitecture.presenter.ShowRepoListPresenter;
 import com.tomoima.cleanarchitecture.ui.adapter.RepoAdapter;
 
@@ -70,7 +70,7 @@ public class UserDetailActivity extends AppCompatActivity implements ShowRepoLis
         ReposRepository reposRepositoryImpl = ReposRepositoryImpl.getRepository();
 
         //Domain Layer: UseCase
-        GetReposUseCase getReposUseCaseImpl = GetReposUseCaseImpl.getUseCase(reposRepositoryImpl, UIThread.getInstance());
+        ReposUseCase getReposUseCaseImpl = ReposUseCaseImpl.getUseCase(reposRepositoryImpl, UIThread.getInstance());
 
         mShowReposListPresenter = new ShowRepoListPresenter(getReposUseCaseImpl);
         mShowReposListPresenter.setShowReposView(this);

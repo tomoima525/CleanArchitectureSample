@@ -9,27 +9,27 @@ import java.util.Collection;
 /**
  * Created by tomoaki on 8/7/15.
  */
-public class GetReposUseCaseImpl extends UseCase<String> implements GetReposUseCase, ReposRepository.ReposListCallback{
-    private static GetReposUseCaseImpl sGetReposUseCaseImpl;
+public class ReposUseCaseImpl extends UseCase<String> implements ReposUseCase, ReposRepository.ReposListCallback{
+    private static ReposUseCaseImpl sReposUseCaseImpl;
     private ReposRepository mReposRepository;
     private PostExecutionThread mThread;
-    private GetReposUseCase.Callback mCallback;
+    private ReposUseCase.ReposUserCaseCallback mCallback;
 
-    public GetReposUseCaseImpl(ReposRepository reposRepository, PostExecutionThread thread){
+    public ReposUseCaseImpl(ReposRepository reposRepository, PostExecutionThread thread){
         mReposRepository = reposRepository;
         mThread = thread;
     }
 
-    public static GetReposUseCaseImpl getUseCase(ReposRepository reposRepository, PostExecutionThread thread){
-        if(sGetReposUseCaseImpl == null){
-            sGetReposUseCaseImpl = new GetReposUseCaseImpl(reposRepository, thread);
+    public static ReposUseCaseImpl getUseCase(ReposRepository reposRepository, PostExecutionThread thread){
+        if(sReposUseCaseImpl == null){
+            sReposUseCaseImpl = new ReposUseCaseImpl(reposRepository, thread);
         }
-        return  sGetReposUseCaseImpl;
+        return sReposUseCaseImpl;
     }
 
 
     @Override
-    public void execute(String user, Callback callback) {
+    public void execute(String user, ReposUserCaseCallback callback) {
         mCallback = callback;
         this.start(user);
     }
@@ -37,6 +37,14 @@ public class GetReposUseCaseImpl extends UseCase<String> implements GetReposUseC
     @Override
     protected void call(String params) {
         mReposRepository.getRepos(params,this);
+    }
+
+    public void setCallback(ReposUserCaseCallback callback) {
+        mCallback = callback;
+    }
+
+    public void removeCallback(){
+        mCallback = null;
     }
 
     @Override

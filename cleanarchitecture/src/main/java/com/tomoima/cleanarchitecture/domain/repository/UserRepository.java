@@ -9,11 +9,12 @@ import java.util.Collection;
  */
 public interface UserRepository {
     // CRUD interface
-    void getFollowers(String user, UserListCallback userListCallback);
-
-
-    interface UserListCallback {
+    void getFollowers(String userId, UserRepositoryCallback userRepositoryCallback);
+    void getUser(String userId, UserRepositoryCallback userRepositoryCallback);
+    void putUser(User user);
+    interface UserRepositoryCallback {
         void onUserListLoaded(Collection<User> usersCollection);
+        void onUserLoaded(User user);
         void onError();
     }
 }
