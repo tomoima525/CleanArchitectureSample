@@ -94,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
     public void onListItemClick(AdapterView<?> adapter, View view, int pos, long id) {
         User user = (User) view.getTag(R.id.list_item);
         gotoUserDetailActivity(user);
+
+        //Check if this user is clicked before
         User checkUser = SearchMemoryCache.getInstance().getUser(user.login);
         if(checkUser != null){
             Toast toast = Toast.makeText(getApplicationContext(), checkUser.login + " is clicked before!", Toast.LENGTH_LONG);

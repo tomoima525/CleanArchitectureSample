@@ -1,13 +1,14 @@
 package com.tomoima.cleanarchitecture.datasource.repository;
 
+import com.tomoima.cleanarchitecture.datasource.api.ApiFactory;
 import com.tomoima.cleanarchitecture.datasource.api.GithubApi;
+import com.tomoima.cleanarchitecture.datasource.memory.UserMemoryCache;
 import com.tomoima.cleanarchitecture.domain.model.User;
 import com.tomoima.cleanarchitecture.domain.repository.UserRepository;
 
 import java.util.List;
 
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -19,7 +20,7 @@ public class UserRepositoryImpl implements UserRepository {
     private GithubApi mApi;
 
     public UserRepositoryImpl(){
-        mApi = createGithubApi();
+        mApi = ApiFactory.createGithubApi();
     }
     public static UserRepositoryImpl getRepository(){
         if(sUserRepository == null) {
@@ -27,26 +28,32 @@ public class UserRepositoryImpl implements UserRepository {
         }
         return sUserRepository;
     }
-    private GithubApi createGithubApi() {
 
-        RestAdapter.Builder builder = new RestAdapter.Builder().setEndpoint(
-                "https://api.github.com/")
-                .setLogLevel(RestAdapter.LogLevel.FULL);
-        return builder.build().create(GithubApi.class);
-    }
     @Override
-    public void getFollowers(String user, final UserListCallback userListCallback) {
-        mApi.listFollowersAsync(user, new Callback<List<User>>() {
+    public void getFollowers(String userId, final UserRepositoryCallback userRepositoryCallback) {
+        mApi.listFollowersAsync(userId, new Callback<List<User>>() {
             @Override
             public void success(List<User> users, Response response) {
-                userListCallback.onUserListLoaded(users);
+                userRepositoryCallback.onUserListLoaded(users);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                userListCallback.onError();
+                userRepositoryCallback.onError();
             }
         });
+    }
+
+    @Override
+    public void getUser(String userId, UserRepositoryCallback userRepositoryCallback) {
+
+        User user = UserMemoryCache.getInstance().getUser(userId);
+        userRepositoryCallback.onUserLoaded(user);
+    }
+
+    @Override
+    public void putUser(User user) {
+        UserMemoryCache.getInstance().put(user.login, user);
     }
 
 

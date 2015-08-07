@@ -1,20 +1,24 @@
 package com.tomoima.cleanarchitecture.presenter;
 
 import com.tomoima.cleanarchitecture.domain.model.User;
-import com.tomoima.cleanarchitecture.domain.usecase.GetFollowerListUseCase;
+import com.tomoima.cleanarchitecture.domain.usecase.CheckUserUseCase;
+import com.tomoima.cleanarchitecture.domain.usecase.FollowerListUseCase;
 
 import java.util.Collection;
 
 /**
  * Created by tomoaki on 7/26/15.
  */
-public class ShowUserListPresenter extends Presenter implements GetFollowerListUseCase.Callback {
+public class ShowUserListPresenter extends Presenter
+        implements FollowerListUseCase.FollowerListUseCaseCallback, CheckUserUseCase.CheckUserUseCaseCallback {
 
-    private GetFollowerListUseCase mGetFollowerListUseCase;
+    private FollowerListUseCase mFollowerListUseCase;
+    private CheckUserUseCase mCheckUserUseCase;
     private ShowUserListView mShowUserListView;
 
-    public ShowUserListPresenter(GetFollowerListUseCase getFollowerListUseCase){
-        mGetFollowerListUseCase = getFollowerListUseCase;
+    public ShowUserListPresenter(FollowerListUseCase followerListUseCase, CheckUserUseCase checkUserUseCase){
+        mFollowerListUseCase = followerListUseCase;
+        mCheckUserUseCase = checkUserUseCase;
     }
 
     public void setShowUserListView(ShowUserListView view){
@@ -28,12 +32,12 @@ public class ShowUserListPresenter extends Presenter implements GetFollowerListU
 
     @Override
     public void resume() {
-
+        mFollowerListUseCase.setCallback(this);
     }
 
     @Override
     public void pause() {
-
+        mFollowerListUseCase.removeCallback();
     }
 
     @Override
@@ -43,7 +47,11 @@ public class ShowUserListPresenter extends Presenter implements GetFollowerListU
 
     public void getFollowerList(String user){
         mShowUserListView.showLoading();
-        mGetFollowerListUseCase.execute(user, this);
+        mFollowerListUseCase.execute(user, this);
+    }
+
+    public void checkUser(User user){
+        mCheckUserUseCase.execute(user, this);
     }
 
     @Override
@@ -52,6 +60,11 @@ public class ShowUserListPresenter extends Presenter implements GetFollowerListU
         mShowUserListView.hideNoResultCase();
         mShowUserListView.showResult(usersCollection);
 
+    }
+
+    @Override
+    public void onChecked(User user) {
+        mShowUserListView.showToast(user.login);
     }
 
     @Override
@@ -67,6 +80,7 @@ public class ShowUserListPresenter extends Presenter implements GetFollowerListU
         void showNoResultCase();
         void hideNoResultCase();
         void showResult(Collection<User> usersCollection);
+        void showToast(String UserId);
 
     }
 }

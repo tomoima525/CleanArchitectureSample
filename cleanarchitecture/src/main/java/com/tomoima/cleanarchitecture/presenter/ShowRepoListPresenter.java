@@ -1,20 +1,20 @@
 package com.tomoima.cleanarchitecture.presenter;
 
 import com.tomoima.cleanarchitecture.domain.model.Repos;
-import com.tomoima.cleanarchitecture.domain.usecase.GetReposUseCase;
+import com.tomoima.cleanarchitecture.domain.usecase.ReposUseCase;
 
 import java.util.Collection;
 
 /**
  * Created by tomoaki on 8/7/15.
  */
-public class ShowRepoListPresenter extends Presenter implements GetReposUseCase.Callback{
+public class ShowRepoListPresenter extends Presenter implements ReposUseCase.ReposUserCaseCallback{
 
-    private GetReposUseCase mGetReposUseCase;
+    private ReposUseCase mReposUseCase;
     private ShowReposView mView;
 
-    public ShowRepoListPresenter(GetReposUseCase getReposUseCase){
-        mGetReposUseCase = getReposUseCase;
+    public ShowRepoListPresenter(ReposUseCase reposUseCase){
+        mReposUseCase = reposUseCase;
     }
 
     public void setShowReposView(ShowReposView view){
@@ -27,12 +27,12 @@ public class ShowRepoListPresenter extends Presenter implements GetReposUseCase.
 
     @Override
     public void resume() {
-
+        mReposUseCase.setCallback(this);
     }
 
     @Override
     public void pause() {
-
+        mReposUseCase.removeCallback();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ShowRepoListPresenter extends Presenter implements GetReposUseCase.
     }
 
     public void getRepos(String user){
-        mGetReposUseCase.execute(user, this);
+        mReposUseCase.execute(user, this);
     }
 
     @Override
